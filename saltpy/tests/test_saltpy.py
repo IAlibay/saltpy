@@ -1,5 +1,8 @@
 """
-Unit and regression test for the saltpy package.
+Basic import test for the saltpy package.
+
+Author: Irfan Alibay
+Date: 2020
 """
 
 # Import package, test suite, and other packages as needed
