@@ -27,6 +27,7 @@ References
 from __future__ import annotations
 
 import math
+import warnings
 from collections import namedtuple
 
 Ions = namedtuple('ions', ['cation', 'anion'])
@@ -48,7 +49,7 @@ def neutralize(charge: float) -> tuple[int, int]:
         NamedTuple containing the cations (first entry) and anions
         (second entry) to be added to neutralize the system.
     """
-    salt = Ions(charge if charge < 0 else 0,
+    salt = Ions(-charge if charge < 0 else 0,
                 charge if charge > 0 else 0)
     return salt
 
@@ -72,8 +73,8 @@ def _water_molar_volume(nwat: int, density: float) -> float:
     return (nwat * 18) / density
 
 
-def add_neutralize(charge: int, nwat: int, concentration: float=0.15,
-                   density: float=997) -> tuple[int, int]:
+def add_neutralize(charge: int, nwat: int, concentration: float = 0.15,
+                   density: float = 997) -> tuple[float, float]:
     """
     The Add-then-Neutralize approach to adding a given salt concentration
     to a solvated system.
@@ -93,9 +94,11 @@ def add_neutralize(charge: int, nwat: int, concentration: float=0.15,
 
     Returns
     -------
-    salt: namedtuple(cations: int, anions: int)
+    salt: namedtuple(cations: float, anions: float)
         NamedTuple containing the cations (first entry) and anions
-        (second entry) to be added to neutralize the system.
+        (second entry) to be added to neutralize the system. These are often
+        fractional numbers, it is up to the user to decide if these should be
+        rounded up or down.
 
     Notes
     -----
@@ -103,13 +106,13 @@ def add_neutralize(charge: int, nwat: int, concentration: float=0.15,
     detailed in [Schmit2018]_.
     """
     N0 = _water_molar_volume(nwat, density) * concentration
-    salt = Ions(N0 + charge if charge < 0 else N0,
+    salt = Ions(N0 - charge if charge < 0 else N0,
                 N0 + charge if charge > 0 else N0)
     return salt
 
 
-def split(charge: int, nwat: int, concentration: float=0.15,
-          density: float=997) -> tuple[int, int]:
+def split(charge: int, nwat: int, concentration: float = 0.15,
+          density: float = 997) -> tuple[int, int]:
     """
     The SPLIT salt addition method as described in [Machado2020]_.
 
@@ -130,20 +133,29 @@ def split(charge: int, nwat: int, concentration: float=0.15,
     -------
     salt: namedtuple(cations: int, anions: int)
         NamedTuple containing the cations (first entry) and anions
-        (second entry) to be added to neutralize the system.
+        (second entry) to be added to neutralize the system. These are often
+        fractional numbers, we note that [Machado2020]_ recommend that these
+        be rounded up, but we leave it it up to the user to decide if these
+        should be rounded up or down.
 
     Notes
     -----
     As detailed in [Machado2020]_, this method is an approximation of sltcap.
-    See :func:`sltcap` for details on limitations.
+    It has many limitations, most importantly, it does not perform well at very
+    low concentrations where you end up with non-sensical values. To help
+    users identify such possible cases, an warning is thrown if
+    N0 / charge < 1 (as detailed in [Machado2020]_).
     """
     N0 = _water_molar_volume(nwat, density) * concentration
+    if charge > 0 and N0 / charge < 1:
+        warnings.warn(f"N0/charge ratio is: {N0/charge} "
+                      f"the results of split could be wrong")
     salt = Ions(N0 - charge/2, N0 + charge/2)
     return salt
 
 
-def sltcap(charge: int, nwat: int, concentration: float=0.15,
-            density: float=997) -> tuple[int, int]:
+def sltcap(charge: int, nwat: int, concentration: float = 0.15,
+           density: float = 997) -> tuple[int, int]:
     """
     The SLTCAP method as detailed in [Schmit2018]_.
 
@@ -164,7 +176,9 @@ def sltcap(charge: int, nwat: int, concentration: float=0.15,
     -------
     salt: namedtuple(cations: int, anions: int)
         NamedTuple containing the cations (first entry) and anions
-        (second entry) to be added to neutralize the system.
+        (second entry) to be added to neutralize the system. These are often
+        fractional numbers, it is up to the user to decide if these should be
+        rounded up or down.
 
 
     Notes
@@ -176,10 +190,13 @@ def sltcap(charge: int, nwat: int, concentration: float=0.15,
     In this latter, case, our current approach is to treat the bound ion as a
     part of the solute (further validation is needed to verify this).
     """
+    # special case due to division by zero, lower conc limit is just neutralize
+    if concentration == 0:
+        return neutralize(charge)
+
     Vw = _water_molar_volume(nwat, density)
     N0 = Vw * concentration
     inner_asinh = math.asinh(charge / (2 * 1 * Vw * concentration))
     salt = Ions(N0 * math.exp(-inner_asinh),
                 N0 * math.exp(inner_asinh))
     return salt
-

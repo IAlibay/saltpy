@@ -1,16 +1,16 @@
 name: test
-channels:
+channels: conda-forge
 dependencies:
     # Base depends
   - python
   - pip
 
+    # Package depends
+  - MDAnalysis
+  - pip:
+    - GromacsWrapper
+
     # Testing
   - pytest
   - pytest-cov
   - codecov
-
-    # Pip-only installs
-  #- pip:
-  #  - codecov
-
