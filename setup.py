@@ -47,8 +47,8 @@ setup(
     # Additional entries you may want simply uncomment the lines you want and fill in the data
     # url='http://www.my_package.com',  # Website
     # Required packages, pulls from pip if needed; do not use for Conda deployment
-    install_requires=["MDAnalysis", "numpy", "scipy", "GromacsWrapper"]
-    platforms=['Linux', 'Mac OS-X']
+    install_requires=["MDAnalysis", "numpy", "scipy", "GromacsWrapper"],
+    platforms=['Linux', 'Mac OS-X'],
     python_requires=">=3.7",
     # Manual control if final package is compressible or not, set False to prevent the .egg from being made
     # zip_safe=False,
