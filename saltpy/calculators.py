@@ -86,7 +86,7 @@ def add_neutralize(charge: int, nwat: int, concentration: float = 0.15,
     nwat: int
         Number of waters in system.
     concentration: float
-        Target salt molar concentration [0.15 mM].
+        Target salt molar concentration [0.15 M].
     density: float
         Water density for molar volume calculation, default value is taken
         as the experimental water density at 298.15 K and 1 atm
@@ -123,7 +123,7 @@ def split(charge: int, nwat: int, concentration: float = 0.15,
     nwat: int
         Number of waters in system.
     concentration: float
-        Target salt molar concentration [0.15 mM].
+        Target salt molar concentration [0.15 M].
     density: float
         Water density for molar volume calculation, default value is taken
         as the experimental water density at 298.15 K and 1 atm
@@ -166,7 +166,7 @@ def sltcap(charge: int, nwat: int, concentration: float = 0.15,
     nwat: int
         Number of waters in system.
     concentration: float
-        Target salt molar concentration [0.15 mM].
+        Target salt molar concentration [0.15 M].
     density: float
         Water density for molar volume calculation, default value is taken
         as the experimental water density at 298.15 K and 1 atm
@@ -199,4 +199,23 @@ def sltcap(charge: int, nwat: int, concentration: float = 0.15,
     inner_asinh = math.asinh(charge / (2 * 1 * Vw * concentration))
     salt = Ions(N0 * math.exp(-inner_asinh),
                 N0 * math.exp(inner_asinh))
+    return salt
+
+
+def genion(charge: int, volume: float, concentration: float = 0.15):
+    """
+    The add-then-neutralise approach used by GROMACS' genion utility.
+
+    Parameters
+    ----------
+    charge: int
+        Total charge of the solute.
+    volume: float
+        Volume of the simulation box.
+    concentration: float
+        Target salt molar concentration [0.15 M]
+    """
+    base_salt = round(concentration * volume * 0.602214)
+    salt = Ions(base_salt - charge if charge < 0 else base_salt,
+                base_salt + charge if charge > 0 else base_salt)
     return salt
