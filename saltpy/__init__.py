@@ -4,7 +4,7 @@ A python toolset for calculating and adding salt concentration to solvated atomi
 """
 
 # Add imports here
-from .calculate import *
+# from .calculate import *
 
 # Handle versioneer
 from ._version import get_versions
