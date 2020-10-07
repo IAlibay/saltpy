@@ -43,3 +43,21 @@ def test_6olx(tmpdir, method, pos, neg):
         test = mda.Universe('test.gro')
         assert len(test.select_atoms('resname NA')) == pos
         assert len(test.select_atoms('resname CL')) == neg
+
+
+def test_warnings_npnn_set(tmpdir):
+    with tmpdir.as_cwd():
+        with pytest.warns(UserWarning, match='nn passed to genion'):
+            genion(s=TPR_6OLX, structure=GRO_6OLX_NOIONS, o='test.gro', nn=10)
+
+        with pytest.warns(UserWarning, match='np passed to genion'):
+            genion(s=TPR_6OLX, structure=GRO_6OLX_NOIONS, o='test.gro', np=0)
+
+
+def test_pq_nq_typerror(tmpdir):
+    with tmpdir.as_cwd():
+        with pytest.raises(TypeError, match="Argument mismatch for pq"):
+            genion(s=TPR_6OLX, structure=GRO_6OLX_NOIONS, o='test.gro', pq=10)
+
+        with pytest.raises(TypeError, match="Argument mismatch for nq"):
+            genion(s=TPR_6OLX, structure=GRO_6OLX_NOIONS, o='test.gro', nq=-5)

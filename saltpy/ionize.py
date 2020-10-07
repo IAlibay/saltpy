@@ -56,9 +56,9 @@ def genion(s, structure, method="SLTCAP", conc=0.15, solventname="SOL",
     for arg in [('pq', 1), ('nq', -1)]:
         if arg[0] in kwargs:
             if kwargs[arg[0]] != arg[1]:
-                errmsg = (f"Argument mismatch for {arg}, value of "
-                          f"{forced_inputs[arg]} was expected, got "
-                          f"{kwargs[arg]} instead")
+                errmsg = (f"Argument mismatch for {arg[0]}, value of "
+                          f"{arg[1]} was expected, got "
+                          f"{kwargs[arg[0]]} instead")
                 raise TypeError(errmsg)
         else:
             kwargs[arg[0]] = arg[1]
@@ -66,11 +66,6 @@ def genion(s, structure, method="SLTCAP", conc=0.15, solventname="SOL",
     # check if input in kwargs, otherwise assign solventname
     if 'input' not in kwargs:
         kwargs['input'] = solventname
-
-    # if `nn` or `np` are set, raise a warning that these will be ignored
-    if ('nn' in kwargs) or ('np' in kwargs):
-        wmsg = "`nn` or `np` have been passed, these will be ignored"
-        warnings.warn(wmsg)
 
     # create the MDA universe and get the ion counts
     u = mda.Universe(s, structure)
