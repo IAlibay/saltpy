@@ -10,7 +10,7 @@ import math
 
 from numpy.testing import assert_almost_equal
 
-from saltpy import calculators
+from saltpy import estimators
 
 
 @pytest.mark.parametrize('charge, pos, neg', [
@@ -18,7 +18,7 @@ from saltpy import calculators
 ])
 def test_neutralize(charge, pos, neg):
     """Basic test for the neutralization calculator"""
-    cations, anions = calculators.neutralize(charge)
+    cations, anions = estimators.neutralize(charge)
     assert pos == cations
     assert neg == anions
 
@@ -30,8 +30,8 @@ def test_neutralize(charge, pos, neg):
 ])
 def test_add_neutralize(charge, nwat, concentration, density, pos, neg):
     """Basic regression test for the add-then-neutralize calculator"""
-    cations, anions = calculators.add_neutralize(charge, nwat, concentration,
-                                                 density)
+    cations, anions = estimators.add_neutralize(charge, nwat, concentration,
+                                                density)
     assert_almost_equal(cations, pos, 3)
     assert_almost_equal(anions, neg, 3)
 
@@ -42,7 +42,7 @@ def test_add_neutralize(charge, nwat, concentration, density, pos, neg):
     [-10, 7400, 0.15, 997, 25.040, 15.040]
 ])
 def test_split(charge, nwat, concentration, density, pos, neg):
-    cations, anions = calculators.split(charge, nwat, concentration, density)
+    cations, anions = estimators.split(charge, nwat, concentration, density)
     assert_almost_equal(cations, pos, 3)
     assert_almost_equal(anions, neg, 3)
 
@@ -53,7 +53,7 @@ def test_split(charge, nwat, concentration, density, pos, neg):
     [-10, 7400, 0.15, 997, 25.654, 15.654]
 ])
 def test_sltcap(charge, nwat, concentration, density, pos, neg):
-    cations, anions = calculators.sltcap(charge, nwat, concentration, density)
+    cations, anions = estimators.sltcap(charge, nwat, concentration, density)
     assert_almost_equal(cations, pos, 3)
     assert_almost_equal(anions, neg, 3)
 
@@ -68,9 +68,9 @@ def test_granulysin(conc, an, split, sltcap):
     charge = 11
     nwat = 6071
 
-    an_ions = calculators.add_neutralize(charge, nwat, conc)
-    split_ions = calculators.split(charge, nwat, conc)
-    sltcap_ions = calculators.sltcap(charge, nwat, conc)
+    an_ions = estimators.add_neutralize(charge, nwat, conc)
+    split_ions = estimators.split(charge, nwat, conc)
+    sltcap_ions = estimators.sltcap(charge, nwat, conc)
 
     # an
     assert round(an_ions[0]) == an[0]
@@ -95,9 +95,9 @@ def test_jev_capsid(conc, an, split, sltcap):
     charge = 20
     nwat = 7419
 
-    an_ions = calculators.add_neutralize(charge, nwat, conc)
-    split_ions = calculators.split(charge, nwat, conc)
-    sltcap_ions = calculators.sltcap(charge, nwat, conc)
+    an_ions = estimators.add_neutralize(charge, nwat, conc)
+    split_ions = estimators.split(charge, nwat, conc)
+    sltcap_ions = estimators.sltcap(charge, nwat, conc)
 
     # an
     assert round(an_ions[0]) == an[0]

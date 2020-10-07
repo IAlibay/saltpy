@@ -2,7 +2,7 @@
 # A python toolset for calculating and adding salt concentration to solvated atomistic systems
 # Author: Irfan Alibay - 2020
 """
-Functions to estimate monovalent salt addition --- :mod:`saltpy.calculate`
+Functions to estimate monovalent salt addition --- :mod:`saltpy.estimators`
 ==========================================================================
 
 References
