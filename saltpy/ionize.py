@@ -10,6 +10,7 @@ import warnings
 import math
 
 import gromacs
+import MDAnalysis as mda
 
 from saltpy.calculate import from_structure
 
