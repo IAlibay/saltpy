@@ -1,8 +1,8 @@
 saltpy
 ==============================
 [//]: # (Badges)
-[![Travis Build Status](https://travis-ci.com/IAlibay/saltpy.svg?branch=master)](https://travis-ci.com/IAlibay/saltpy)
-[![codecov](https://codecov.io/gh/IAlibay/saltpy/branch/master/graph/badge.svg)](https://codecov.io/gh/IAlibay/saltpy/branch/main)
+[![Travis Build Status](https://travis-ci.com/IAlibay/saltpy.svg?branch=main)](https://travis-ci.com/IAlibay/saltpy)
+[![codecov](https://codecov.io/gh/IAlibay/saltpy/branch/main/graph/badge.svg)](https://codecov.io/gh/IAlibay/saltpy/branch/main)
 
 
 A python toolset for calculating and adding salt concentration to solvated atomistic systems
