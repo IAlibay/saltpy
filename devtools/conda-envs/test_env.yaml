@@ -1,6 +1,7 @@
 name: test
 channels:
   - conda-forge
+  - bioconda
 dependencies:
     # Base depends
   - python
@@ -8,6 +9,7 @@ dependencies:
 
     # Package depends
   - MDAnalysis
+  - gromacs=2019.1
   - pip:
     - GromacsWrapper
 
