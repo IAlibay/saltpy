@@ -2,7 +2,7 @@
 # A python toolset for calculating and adding salt concentration to solvated atomistic systems
 # Author: Irfan Alibay - 2020
 """
-Functions to estimate monovalent salt addition --- :mod:`saltpy.calculate`
+Functions to estimate monovalent salt addition --- :mod:`saltpy.estimators`
 ==========================================================================
 
 References
@@ -211,11 +211,11 @@ def genion(charge: int, volume: float, concentration: float = 0.15):
     charge: int
         Total charge of the solute.
     volume: float
-        Volume of the simulation box.
+        Volume of the simulation box in Angstrom^3.
     concentration: float
         Target salt molar concentration [0.15 M]
     """
-    base_salt = round(concentration * volume * 0.602214)
+    base_salt = round(concentration * (volume / 1000) * 0.602214)
     salt = Ions(base_salt - charge if charge < 0 else base_salt,
                 base_salt + charge if charge > 0 else base_salt)
     return salt
