@@ -115,7 +115,7 @@ def test_jev_capsid(conc, an, split, sltcap):
 @pytest.mark.parametrize('charge, vol, pos, neg', [
     [9, 541572.5150820496, 49, 58],
     [1, 468650.22283453925, 42, 43],
-    [-4,588920.7272282053, 57, 53]
+    [-4, 588920.7272282053, 57, 53]
 ])
 def test_genion(charge, vol, pos, neg):
     cations, anions = estimators.genion(charge, vol)

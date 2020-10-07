@@ -8,18 +8,15 @@ Functions to calculate salt addition from structures --- :mod:`saltpy.analyze`
 
 from __future__ import annotations
 
-import warnings
-from collections import namedtuple
-
-import MDAnalysis
 from MDAnalysis.lib.mdamath import box_volume
+from MDAnalysis.exceptions import NoDataError
 
 from saltpy import estimators
 
 
 def from_structure(universe: object, method: str = "SLTCAP",
                    watername: str = "HOH", concentration: float = 0.15,
-                   density: float = 997)
+                   density: float = 997):
     """
     Method for estimating the needed number of ions from an input solvated
     structure.
@@ -53,20 +50,20 @@ def from_structure(universe: object, method: str = "SLTCAP",
         errmsg = "Input structure must contain charges"
         raise IOError(errmsg) from err
 
-    nwat = len(universe.select_atoms('resname {watername}').residues)
+    nwat = len(universe.select_atoms(f'resname {watername}').residues)
     volume = box_volume(universe.atoms.dimensions)
 
     # Define a list of available methods and input arguments
     # base case kwargs set for the estimators
-    kwarg_set = {'charge': charge, 'nwat': nwat,
-                 'concentration': concentration, 'density': density}
-    funcs = {'SLTCAP': [estimators.sltcap, kwargs_set],
-             'SPLIT': [estimators.split, kwargs_set],
-             'ADD_NEUTRALIZE': [estimators.add_neutralize, kwargs_set],
+    kwargs_dict = {'charge': charge, 'nwat': nwat,
+                   'concentration': concentration, 'density': density}
+    funcs = {'SLTCAP': [estimators.sltcap, kwargs_dict],
+             'SPLIT': [estimators.split, kwargs_dict],
+             'ADD_NEUTRALIZE': [estimators.add_neutralize, kwargs_dict],
              'NEUTRALIZE': [estimators.neutralize, {'charge': charge}],
              'GENION': [estimators.genion, {'charge': charge, 'volume': volume,
                                             'concentration': concentration}]}
 
-    salt = funcs[method.upper()][0](**funcs[method.upper()[1])
-    
+    salt = funcs[method.upper()][0](**funcs[method.upper()][1])
+
     return salt
