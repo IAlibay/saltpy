@@ -10,7 +10,7 @@ on:
 
 concurrency:
   group: "${{ github.ref }}-${{ github.head_ref }}"
-  cancel-in-progress: yes
+  cancel-in-progress: true
 
 defaults:
   run:
@@ -39,9 +39,7 @@ jobs:
           environment-file: devtools/conda-envs/test_env.yaml
           channels: conda-forge,bioconda,defaults
           active-environment: test
-          auto-update-conda: false
           auto-activate-base: false
-          show-channel-urls: true
       - name: install
         run: python setup.py develop --no-deps
       - name: test
