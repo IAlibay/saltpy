@@ -9,7 +9,7 @@ dependencies:
 
     # Package depends
   - MDAnalysis
-  - gromacs=2019.1
+  - gromacs
   - pip:
     - GromacsWrapper
 

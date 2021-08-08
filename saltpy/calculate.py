@@ -28,7 +28,8 @@ def from_structure(universe: object, method: str = "SLTCAP",
         charges.
     method: str
         Method to use for estimating ions. Current options are;
-        SLTCAP (default), SPLIT, GENION, ADD_NEUTRALIZE, NEUTRALIZE.
+        ``SLTCAP`` (default), ``SPLIT``, ``GENION``, ``ADD_NEUTRALIZE``,
+        ``NEUTRALIZE``.
     watername: str
         Name of water residues ['HOH']
     concentration: float

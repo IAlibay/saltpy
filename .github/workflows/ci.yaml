@@ -1,0 +1,55 @@
+name: actions-ci
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+concurrency:
+  group: "${{ github.ref }}-${{ github.head_ref }}"
+  cancel-in-progress: yes
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+        python-version: [3.7, 3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: runner init
+        run: |
+          uname -a
+          df -h
+          ulimit -a
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          auto-update-conda: true
+          mamba-version: "*"
+          environment-file: devtools/conda-envs/test_env.yaml
+          channels: conda-forge,bioconda,defaults
+          active-environment: test
+          auto-update-conda: false
+          auto-activate-base: false
+          show-channel-urls: true
+      - name: install
+        run: python setup.py develop --no-deps
+      - name: test
+        run: pytest -v --cov=saltpy --cov-report=xml saltpy/tests/
+      - name: codecov
+        uses: codecov/codecov-action@v2
+        with:
+          file: coverage.xml
+          fail_ci_if_error: True
+          verbose: True
+
