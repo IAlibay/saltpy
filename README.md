@@ -1,7 +1,7 @@
 saltpy
 ==============================
 [//]: # (Badges)
-[![Github Actions CI Status](https://github.com/IAlibay/saltpy/actions/workflows/ci.yaml/badge.svg)]
+[![Github Actions CI Status](https://github.com/IAlibay/saltpy/actions/workflows/ci.yaml/badge.svg)](https://github.com/IAlibay/saltpy/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/IAlibay/saltpy/branch/main/graph/badge.svg)](https://codecov.io/gh/IAlibay/saltpy/branch/main)
 
 
