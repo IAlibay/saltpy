@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest, macOS-latest]
         python-version: [3.7, 3.8, 3.9]
     steps:
       - uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
           mamba-version: "*"
           environment-file: devtools/conda-envs/test_env.yaml
           channels: conda-forge,bioconda,defaults
-          active-environment: test
+          activate-environment: test
           auto-activate-base: false
       - name: install
         run: python setup.py develop --no-deps
